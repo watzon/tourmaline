@@ -1,120 +1,8 @@
-require "json"
-require "./message_entity"
-
-module Tourmaline
-  # # This object represents a Telegram user or bot.
+module Tourmaline::Models
   class Message
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    getter message_id : Int64
-
-    getter from : User?
-
-    getter sender_chat : Chat?
-
-    @[JSON::Field(converter: Time::EpochConverter)]
-    getter date : Time
-
-    getter chat : Chat
-
-    getter forward_from : User?
-
-    getter forward_from_chat : Chat?
-
-    getter forward_from_message_id : Int64?
-
-    getter forward_signature : String?
-
-    getter forward_sender_name : String?
-
-    @[JSON::Field(converter: Time::EpochConverter)]
-    getter forward_date : Time?
-
-    @[JSON::Field(converter: Time::EpochConverter)]
-    getter edit_date : Time?
-
-    @[JSON::Field(key: "reply_to_message")]
-    getter reply_message : Message?
-
-    getter via_bot : User?
-
-    @[JSON::Field(converter: Time::EpochConverter)]
-    getter edit_date : Time?
-
-    getter media_group_id : String?
-
-    getter author_signature : String?
-
-    getter text : String?
-
-    getter entities : Array(MessageEntity) = [] of Tourmaline::MessageEntity
-
-    getter animation : Animation?
-
-    getter audio : Audio?
-
-    getter document : Document?
-
-    getter photo : Array(PhotoSize) = [] of Tourmaline::PhotoSize
-
-    getter sticker : Sticker?
-
-    getter video : Video?
-
-    getter video_note : VideoNote?
-
-    getter voice : Voice?
-
-    getter caption : String?
-
-    getter caption_entities : Array(MessageEntity) = [] of Tourmaline::MessageEntity
-
-    getter contact : Contact?
-
-    getter dice : Dice?
-
-    getter game : Game?
-
-    getter poll : Poll?
-
-    getter venue : Venue?
-
-    getter location : Location?
-
-    getter new_chat_members : Array(User) = [] of Tourmaline::User
-
-    getter left_chat_member : User?
-
-    getter new_chat_title : String?
-
-    getter new_chat_photo : Array(PhotoSize) = [] of Tourmaline::PhotoSize
-
-    getter delete_chat_photo : Bool?
-
-    getter group_chat_created : Bool?
-
-    getter supergroup_chat_created : Bool?
-
-    getter channel_chat_created : Bool?
-
-    getter migrate_to_chat_id : Int64?
-
-    getter migrate_from_chat_id : Int64?
-
-    getter pinned_message : Message?
-
-    getter invoice : Invoice?
-
-    getter successful_payment : SuccessfulPayment?
-
-    getter connected_website : String?
-
-    getter passport_data : PassportData?
-
-    getter proximity_alert_triggered : ProximityAlertTriggered?
-
-    getter reply_markup : InlineKeyboardMarkup?
+    def reply_message
+      reply_to_message
+    end
 
     def link
       if chat.username
@@ -225,7 +113,7 @@ module Tourmaline
       client.send_message(chat, message, **kwargs)
     end
 
-    {% for content_type in %w[audio animation contact document location photo media_group venu video video_note voice invoice poll dice dart basket] %}
+    {% for content_type in %w[audio animation contact document location photo media_group venu video video_note voice invoice poll dice dart basketball slot_machine] %}
       def reply_with_{{content_type.id}}(*args, **kwargs)
         client.send_{{content_type.id}}(chat, *args, **kwargs, reply_to_message: message_id)
       end

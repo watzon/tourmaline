@@ -8,7 +8,7 @@ module Tourmaline
     property filename : String
 
     def initialize(@filename = "tourmaline_persistence.json")
-      super
+      super()
     end
 
     def init

@@ -1,25 +1,5 @@
-module Tourmaline
+module Tourmaline::Models
   class CallbackQuery
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    @[JSON::Field(ignore: true)]
-    property! client : Tourmaline::Client
-
-    getter id : String
-
-    getter from : User
-
-    getter message : Message?
-
-    getter inline_message_id : String?
-
-    getter chat_instance : String?
-
-    getter data : String?
-
-    getter game_short_name : String?
-
     def answer(*args, **kwargs)
       client.answer_callback_query(id, *args, **kwargs)
     end

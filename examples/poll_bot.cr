@@ -38,7 +38,7 @@ class PollBot < Tourmaline::Client
       "2b|!2b",
       ["True", "False"],
       correct_option_id: 0,
-      type: Poll::Type::Quiz
+      type: "quiz"
     )
   end
 end

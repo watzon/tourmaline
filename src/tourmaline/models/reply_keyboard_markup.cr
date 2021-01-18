@@ -1,53 +1,10 @@
 require "json"
 require "../keyboard_builder"
 
-module Tourmaline
+module Tourmaline::Models
   alias Button = KeyboardButton | InlineKeyboardButton
 
-  class KeyboardButton
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    getter text : String
-
-    getter request_contact : Bool = false
-
-    getter request_location : Bool = false
-
-    getter request_poll : KeyboardButtonPollType?
-
-    def initialize(@text : String, @request_contact = false, @request_location = false, @request_poll = nil)
-    end
-  end
-
-  # This object represents type of a poll, which is allowed to be
-  # created and sent when the corresponding button is pressed.
-  class KeyboardButtonPollType
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    @[JSON::Field(converter: Tourmaline::Poll::PollTypeConverter)]
-    getter type : Poll::Type
-
-    def initialize(@type)
-    end
-  end
-
   class ReplyKeyboardMarkup
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    getter keyboard : Array(Array(KeyboardButton))
-
-    getter resize_keyboard : Bool = false
-
-    getter one_time_keyboard : Bool = false
-
-    getter selective : Bool = false
-
-    def initialize(@keyboard = [] of Array(KeyboardButton), @resize_keyboard = false, @one_time_keyboard = false, @selective = false)
-    end
-
     def <<(row : Int32, key : KeyboardButton)
       keyboard[row] << key
     end
@@ -74,7 +31,7 @@ module Tourmaline
       builder.keyboard(columns)
     end
 
-    class Builder < KeyboardBuilder(Tourmaline::KeyboardButton, Tourmaline::ReplyKeyboardMarkup)
+    class Builder < KeyboardBuilder(KeyboardButton, ReplyKeyboardMarkup)
       def keyboard(columns = nil) : G
         buttons = KeyboardBuilder(T, G).build_keyboard(@keyboard, columns: columns || 1)
         ReplyKeyboardMarkup.new(buttons, @resize, @one_time, @selective)
@@ -92,8 +49,8 @@ module Tourmaline
         button(text, request_location: true)
       end
 
-      def poll_request_button(text, type : Poll::Type)
-        type = KeyboardButtonPollType.new(type)
+      def poll_request_button(text, type)
+        type = KeyboardButtonPollType.new(type.to_s)
         button(text, request_poll: type)
       end
     end

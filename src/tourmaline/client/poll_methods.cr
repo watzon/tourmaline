@@ -10,7 +10,7 @@ module Tourmaline
         question : String,
         options : Array(String), # 2-10 strings, up to 100 chars each
         anonymous : Bool = true,
-        type : Poll::Type = Poll::Type::Regular,
+        type : String | Symbol = "regular",
         allows_multiple_answers : Bool = false,
         correct_option_id : Int32? = nil, # required for quiz mode
         close_date : Time? = nil,
@@ -20,6 +20,8 @@ module Tourmaline
         reply_to_message = nil,
         reply_markup = nil
       )
+        type = type.to_s
+
         if options.size < 2 || options.size > 10
           raise "Incorrect option count. Expected 2-10, given #{options.size}."
         end
@@ -28,7 +30,7 @@ module Tourmaline
           raise "Incorrect option size. Poll options must be between 1 and 300 characters."
         end
 
-        if type == Poll::Type::Quiz && !correct_option_id
+        if type == "quiz" && !correct_option_id
           raise "Quiz poll type requires a correct_option_id be set."
         end
 
@@ -42,7 +44,7 @@ module Tourmaline
           question:                question,
           options:                 options,
           anonymous:               anonymous,
-          type:                    type.to_s,
+          type:                    type,
           allows_multiple_answers: allows_multiple_answers,
           correct_option_id:       correct_option_id,
           close_date:              close_date.try &.to_unix,

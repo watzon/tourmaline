@@ -67,8 +67,8 @@ module Tourmaline
         if (message = update.message || update.channel_post) || (@on_edit && (message = update.edited_message || update.edited_channel_post))
           if ((raw_text = message.raw_text) && (text = message.text)) ||
              (raw_text = message.raw_caption && (text = message.caption))
-            return if private_only && message.chat.type != Chat::Type::Private
-            return if (group_only || admin_only) && message.chat.type == Chat::Type::Private
+            return if private_only && message.chat.private?
+            return if (group_only || admin_only) && message.chat.private?
 
             if @admin_only
               if from = message.from

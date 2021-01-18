@@ -30,5 +30,8 @@ development_dependencies:
   spectator:
     github: icy-arctic-fox/spectator
     branch: master
+  myhtml:
+    github: kostya/myhtml
+    branch: master
 
 license: MIT

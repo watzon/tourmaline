@@ -1,30 +1,5 @@
-module Tourmaline
-  # # This object represents a Telegram user or bot.
+module Tourmaline::Models
   class User
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    @[JSON::Field(ignore: true)]
-    property! client : Tourmaline::Client
-
-    getter id : Int64
-
-    getter is_bot : Bool
-
-    getter first_name : String
-
-    getter last_name : String?
-
-    getter username : String?
-
-    getter language_code : String?
-
-    getter can_join_groups : Bool?
-
-    getter can_read_all_group_messages : Bool?
-
-    getter supports_inline_queries : Bool?
-
     def full_name
       [first_name, last_name].compact.join(" ")
     end

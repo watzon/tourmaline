@@ -168,19 +168,21 @@ module Tourmaline
     end
   end
 
-  class Chat
-    def send_menu(menu : RoutedMenu, **kwargs)
-      Container.client.send_menu(self, menu, **kwargs)
-    end
-  end
-
-  class Message
-    def reply_with_menu(menu : RoutedMenu, **kwargs)
-      Container.client.send_menu(chat, menu, **kwargs, reply_to_message: message_id)
+  module Models
+    class Chat
+      def send_menu(menu : RoutedMenu, **kwargs)
+        Container.client.send_menu(self, menu, **kwargs)
+      end
     end
 
-    def respond_with_menu(menu : RoutedMenu, **kwargs)
-      Container.client.send_menu(chat, menu, **kwargs, reply_to_message: nil)
+    class Message
+      def reply_with_menu(menu : RoutedMenu, **kwargs)
+        Container.client.send_menu(chat, menu, **kwargs, reply_to_message: message_id)
+      end
+
+      def respond_with_menu(menu : RoutedMenu, **kwargs)
+        Container.client.send_menu(chat, menu, **kwargs, reply_to_message: nil)
+      end
     end
   end
 end

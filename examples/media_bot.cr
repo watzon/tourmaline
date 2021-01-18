@@ -38,10 +38,12 @@ class MediaBot < Tourmaline::Client
   def album_command(ctx)
     ctx.message.reply_with_media_group([
       InputMediaPhoto.new(
+        "photo",
         media: "https://picsum.photos/200/500/",
         caption: "From url"
       ),
       InputMediaPhoto.new(
+        "photo",
         media: File.expand_path("./cat.jpg", __DIR__),
         caption: "Local"
       ),
@@ -60,7 +62,7 @@ class MediaBot < Tourmaline::Client
 
   @[OnCallbackQuery("swap_media")]
   def on_swap_media(ctx)
-    ctx.query.message.try &.edit_media(InputMediaAnimation.new(ANIMATION_URL_2))
+    ctx.query.message.try &.edit_media(InputMediaAnimation.new("animation", ANIMATION_URL_2))
   end
 end
 

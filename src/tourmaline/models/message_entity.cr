@@ -1,32 +1,27 @@
-module Tourmaline
+module Tourmaline::Models
   class MessageEntity
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    MENTION_TYPES = %w[
-      mention text_mention hashtag cashtag bot_command url email phone_number
-      bold italic code pre text_link underline strikethrough
-    ]
-
-    getter type : String
-
-    getter offset : Int64
-
-    getter length : Int64
-
-    getter url : String?
-
-    getter user : User?
-
-    getter language : String?
-
-    def initialize(@type, @offset, @length, @url = nil, @user = nil, @language = nil)
+    enum Type
+     Mention
+     TextMention
+     Hashtag
+     Cashtag
+     BotCommand
+     Url
+     Email
+     PhoneNumber
+     Bold
+     Italic
+     Code
+     Pre
+     TextLink
+     Underline
+     Strikethrough
     end
 
-    {% for mention_type in MENTION_TYPES %}
-      def {{mention_type.id}}?
-        @type == {{mention_type}}
-      end
+    {% for type in MessageEntity::Type.constants %}
+    def {{ type.id.underscore }}?
+      @type.{{ type.id.underscore }}?
+    end
     {% end %}
   end
 end

@@ -1,5 +1,5 @@
 require "../src/tourmaline"
-require "../src/tourmaline/extra/paged_inline_keyboard"
+require "../src/tourmaline/extra/paginated_keyboard"
 
 class PaginationBot < Tourmaline::Client
   @[Command("start")]
@@ -7,6 +7,7 @@ class PaginationBot < Tourmaline::Client
     results = ('a'..'z').to_a.map(&.to_s)
 
     keyboard = PaginatedKeyboard.new(
+      self,
       results,
       per_page: 5,
       prefix: "{index}. ",

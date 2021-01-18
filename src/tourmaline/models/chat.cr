@@ -1,42 +1,11 @@
-module Tourmaline
-  # # This object represents a Telegram user or bot.
+module Tourmaline::Models
   class Chat
-    include JSON::Serializable
-    include Tourmaline::Model
-
-    getter id : Int64
-
-    getter type : Type
-
-    getter title : String?
-
-    getter username : String?
-
-    getter first_name : String?
-
-    getter last_name : String?
-
-    getter photo : ChatPhoto?
-
-    getter bio : String?
-
-    getter description : String?
-
-    getter invite_link : String?
-
-    getter pinned_message : Message?
-
-    getter permissions : ChatPermissions?
-
-    getter slow_mode_delay : Int32?
-
-    getter sticker_set_name : String?
-
-    getter can_set_sticker_set : Bool?
-
-    getter linked_chat_id : Int64?
-
-    getter location : ChatLocation?
+    enum Type
+      Supergroup
+      Private
+      Group
+      Channel
+    end
 
     def name
       if first_name || last_name
@@ -47,19 +16,19 @@ module Tourmaline
     end
 
     def supergroup?
-      type == Type::Supergroup
+      type.supergroup?
     end
 
     def private?
-      type == Type::Private
+      type.private?
     end
 
     def group?
-      type == Type::Group
+      type.group?
     end
 
     def channel?
-      type == Type::Channel
+      type.channel?
     end
 
     def invite_link
@@ -182,21 +151,6 @@ module Tourmaline
     def set_permissions(permissions)
       client.set_chat_permissions(id, permissions)
       @permissions = permissions.is_a?(ChatPermissions) ? permissions : ChatPermissions.new(permissions)
-    end
-
-    enum Type
-      Private
-      Group
-      Supergroup
-      Channel
-
-      def self.new(pull : JSON::PullParser)
-        parse(pull.read_string)
-      end
-
-      def to_json(json : JSON::Builder)
-        json.string(to_s)
-      end
     end
   end
 end
